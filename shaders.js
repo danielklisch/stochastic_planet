@@ -391,7 +391,7 @@ const fsSource = `#version 300 es
     }
 
     //get cloud density
-    float get_clouds(vec3 p) {
+    float get_clouds(vec3 p,float intensity) {
         //convert cartesian to polar coordinates
         float y = asin(p.y);
         vec3 c = p/cos(y);
@@ -408,12 +408,12 @@ const fsSource = `#version 300 es
         clouds += perlin(p*4.0).x*0.125;
         clouds += perlin(p*8.0).x*0.125;
         clouds -= 0.25;
-        return min(max(clouds-(1.0-_CloudsOffset),0.0),1.0);
+        return min(max(clouds-(1.0-_CloudsOffset),0.0)*intensity,1.0);
     }
 
     //get blurred cloud density
     //uses blurred texture and no perlin noise
-    float get_clouds_blurred(vec3 p) {
+    float get_clouds_blurred(vec3 p,float intensity) {
         float y = asin(p.y);
         vec3 c = p/cos(y);
         float x = atan(c.z,c.x);
@@ -421,7 +421,7 @@ const fsSource = `#version 300 es
         y = y/3.1415+0.5;
         vec3 r = hash(vec3(1,1,1));
         float clouds = texture(_CloudsBlurred,vec2(x+r.x,y)).r+texture(_CloudsBlurred,vec2(x+r.y,y)).r+texture(_CloudsBlurred,vec2(x+r.z,y)).r;
-        return min(1.5*max(clouds-(1.0-_CloudsOffset),0.0),1.0);
+        return min(1.5*max(clouds-(1.0-_CloudsOffset),0.0)*intensity,1.0);
     }
 
     void main(void) {
@@ -445,6 +445,7 @@ const fsSource = `#version 300 es
         lAtmo *= lAtmo;
         
         //test if ray intersect the planet
+        vec4 sc = vec4(0,0,0,0);
         vec2 intersect_plnt = sphere_intersection(pos,dir,1.0);
         if (intersect_plnt.x>0.0) {
             intersect_atmo.y = min(intersect_atmo.y,intersect_plnt.x);
@@ -458,16 +459,19 @@ const fsSource = `#version 300 es
             //calculate diffuse and specular lighting based on normal
             vec3 n = normal(pos_plnt,c.a);
             float lDiff = n.z;
-            float fSpec = texture(_LUT_s,uv).r;
+            
+            //get specularity and cloud coverage
+            sc = texture(_LUT_s,uv);
+            float fSpec = sc.r;
             if (fSpec>0.9) n = pos_plnt;
             vec3 refl = dir-2.0*n*dot(n,dir);
             float lSpec = 0.666*pow(max(refl.z,0.0),100.0);
             lSpec *= fSpec;
 
             //apply cloud shadows
-            lDiff *= 1.0-get_clouds_blurred(normalize(pos_plnt+vec3(0,0,-1)*sphere_intersection(pos_plnt,vec3(0,0,-1),1.003).x));
+            lDiff *= 1.0-get_clouds_blurred(normalize(pos_plnt+vec3(0,0,-1)*sphere_intersection(pos_plnt,vec3(0,0,-1),1.003).x),sc.g);
             if (lSpec>0.01) {
-                lSpec *= 1.0-get_clouds(normalize(pos_plnt-refl*sphere_intersection(pos_plnt,-refl,1.003).x));
+                lSpec *= 1.0-get_clouds(normalize(pos_plnt-refl*sphere_intersection(pos_plnt,-refl,1.003).x),sc.g);
             }
             
             //background color is replaced with planet color
@@ -478,7 +482,7 @@ const fsSource = `#version 300 es
         vec2 intersect_cloud = sphere_intersection(pos,dir,1.003);
         if (intersect_cloud.x>0.0) {
             vec3 pos_cloud = normalize(pos+intersect_cloud.x*dir);
-            float clouds = get_clouds(pos_cloud);
+            float clouds = get_clouds(pos_cloud,sc.g);
             fragmentColor.rgb = vec3(1,1,1)*max(pos_cloud.z,0.1*lAtmo)*clouds+fragmentColor.rgb*(1.0-clouds);
         }
         
