@@ -1,0 +1,31 @@
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+canvas {  
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  position: absolute;
+  z-index: 1;
+}
+video {
+  display: none;
+}
+input {
+  width: 100px;
+  margin-left:auto;
+  margin-right:0;
+}
+button {
+  width: 100px;
+  height: 30px;
+}
+#ui { 
+  margin-left:20px;
+  margin-top:20px;
+  border: 1px solid black;
+  background-color: white;  
+  z-index: 1000 !important;
+  position: absolute; 
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Stochastic Planet</title>
+    <link rel="stylesheet" href="webgl.css" type="text/css">
+  </head>
+  
+  <body>
+    <div>
+        <canvas id="glcanvas"></canvas>
+        <div id="ui">
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Resolution:  <input type="range" min="10" max="100" value="50" class="slider" id="Resolution" oninput="resizeCanvas()">
+            </div>            
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Seed:  <input type="number" value="0" id="input_Seed">
+            </div>
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Height Scale:  <input type="range" min="50" max="150" value="100" class="slider" id="input_HeightScale">
+            </div>
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Height Offset:  <input type="range" min="-50" max="50" value="0" class="slider" id="input_HeightOffset">
+            </div> 
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Temp. Scale:  <input type="number" min="-1" max="1" value="1" id="input_TempScale">
+            </div>    
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Temp. Offset:  <input type="range" min="-100" max="100" value="0" class="slider" id="input_TempOffset">
+            </div>             
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Temp. Gradient:  <input type="range" min="50" max="300" value="100" class="slider" id="input_TempGrad">
+            </div>      
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Lock Hemisphere:  <input type="number" min="0" max="1" value="0" id="input_LockHemi">
+            </div>    
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                Clouds:  <input type="range" min="-50" max="100" value="50" class="slider" id="input_Clouds">
+            </div>               
+            <div style="margin:10px; display: flex; justify-content: space-around">
+                <button type="button" onclick="randomize()">Randomize!</button> 
+            </div>         
+        </div>
+    </div>
+  </body>
+
+  <script src="gl-matrix.js"></script>
+  <script src="shaders.js"></script>    
+  <script src="mesh.js"></script>  
+  <script src="controls.js"></script>  
+  <script src="webgl.js"></script>
+</html>
