@@ -49,7 +49,7 @@ function main() {
         then = now;
 
         handleInput(now,deltaTime);
-        drawScene();
+        drawScene(now);
 
         requestAnimationFrame(render);
     }
@@ -122,7 +122,7 @@ function isPowerOf2(value) {
   return (value & (value - 1)) == 0;
 }
 
-function drawScene() {
+function drawScene(now) {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     
     gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
@@ -168,7 +168,8 @@ function drawScene() {
     }
 
     gl.useProgram(programInfo.program);
-
+    
+    gl.uniform1f(gl.getUniformLocation(programInfo.program, "_Time"),         now);
     gl.uniform1f(gl.getUniformLocation(programInfo.program, "_Seed"),         document.getElementById("input_Seed").value);
     gl.uniform1f(gl.getUniformLocation(programInfo.program, "_HeightScale"),  document.getElementById("input_HeightScale").value/100.0);
     gl.uniform1f(gl.getUniformLocation(programInfo.program, "_HeightOffset"), document.getElementById("input_HeightOffset").value/100.0);
