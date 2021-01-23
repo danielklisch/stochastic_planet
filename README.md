@@ -13,9 +13,9 @@ You can try out the web demo [here](https://danielklisch.github.io/stochastic_pl
 
 The shader uses 2 high resolution textures as inputs, one for color and one for height.
 For each pixel Stochastic Spherical Texturing is used to generate color (RGB) and height (H) values from these textures.
-To apply an earth-like stile to the result Histogram Transfer is used.
+To apply an earth-like style to the result Histogram Transfer is used.
 However, Histogram Transfer is performance intesive and requires knowledge of all input pixels to generate the color distributions.
-For Histogram Transfer with two channels (RGB) a 3 dimensional Look Up Table (LUT) could be used.
+For Histogram Transfer with three channels (RGB) a 3 dimensional Look Up Table (LUT) could be used.
 The Histogram Transfer used here has 5 inputs: Color (RGB), Height (H), and Latitude (L).
 This would result in a 5 dimensional Look Up Table which would take up too much space.
 Because of this, a neural network was trained to approximate the Histogram Transfer.
