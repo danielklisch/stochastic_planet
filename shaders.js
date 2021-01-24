@@ -401,7 +401,7 @@ const fsSource = `#version 300 es
         y = y/3.1415+0.5;
         //blend randomly rotated copies of the cloud texture
         vec3 r = hash(vec3(1,1,1));
-        float clouds = texture(_Clouds,vec2(x+r.x+_Time*0.0002,y)).r+texture(_Clouds,vec2(r.y-x-_Time*0.0001,y)).r+texture(_Clouds,vec2(x+r.z,1.0-y)).r;
+        float clouds = texture(_Clouds,vec2(x+r.x+_Time*0.0002,y)).r+texture(_Clouds,vec2(r.y-x+_Time*0.0001,y)).r+texture(_Clouds,vec2(x+r.z,1.0-y)).r;
         //add perlin noise for high frequency detail
         p *= 2048.0;
         clouds += perlin(p).x*0.125;
@@ -421,7 +421,7 @@ const fsSource = `#version 300 es
         x = x/6.2831;
         y = y/3.1415+0.5;
         vec3 r = hash(vec3(1,1,1));
-        float clouds = texture(_CloudsBlurred,vec2(x+r.x+_Time*0.0002,y)).r+texture(_CloudsBlurred,vec2(r.y-x-_Time*0.0001,y)).r+texture(_CloudsBlurred,vec2(x+r.z,1.0-y)).r;
+        float clouds = texture(_CloudsBlurred,vec2(x+r.x+_Time*0.0002,y)).r+texture(_CloudsBlurred,vec2(r.y-x+_Time*0.0001,y)).r+texture(_CloudsBlurred,vec2(x+r.z,1.0-y)).r;
         return min(1.5*max(clouds+intensity-(2.0-_CloudsOffset),0.0),1.0);
     }
 
