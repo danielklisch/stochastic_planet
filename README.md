@@ -9,7 +9,7 @@ You can try out the web demo [here](https://danielklisch.github.io/stochastic_pl
 
 ## How It Works
 
-<img src='figures/figure2.png'/>
+<img src='figures/figure_architecture.png'/>
 
 The shader uses 2 high resolution textures as inputs, one for color and one for height.
 For each pixel Stochastic Spherical Texturing is used to generate color (RGB) and height (H) values from these textures.
