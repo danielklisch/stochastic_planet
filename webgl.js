@@ -178,6 +178,7 @@ function drawScene(now) {
     gl.uniform1f(gl.getUniformLocation(programInfo.program, "_TempGrad"),     document.getElementById("input_TempGrad").value/100.0);
     gl.uniform1f(gl.getUniformLocation(programInfo.program, "_LockHemi"),     document.getElementById("input_LockHemi").value);
     gl.uniform1f(gl.getUniformLocation(programInfo.program, "_CloudsOffset"), document.getElementById("input_Clouds").value/100.0);
+    gl.uniform1f(gl.getUniformLocation(programInfo.program, "_TidalLock"),     document.getElementById("input_TidalLock").value);
     
     gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix,false,projectionMatrix);
     gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix,false,modelViewMatrix);

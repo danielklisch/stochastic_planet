@@ -100,6 +100,7 @@ const fsSource = `#version 300 es
     uniform float _TempGrad;
     uniform float _LockHemi;
     uniform float _CloudsOffset;
+    uniform float _TidalLock;
     
     //pseudorandom number generator
     vec3 hash(vec3 v) {
@@ -290,6 +291,9 @@ const fsSource = `#version 300 es
         layer_0[3] = c.b;
         //modify latitude based on temperature settings
         float y = -p.y;
+        if (_TidalLock>0.5) {
+            y = min(1.0-p.z,1.0);
+        }
         y = abs(y)*_LockHemi+y*(1.0-_LockHemi);
         y *= _TempScale;
         y = (pow(max(abs(y)+_TempOffset*_LockHemi,0.0),_TempGrad)+_TempOffset*_LockHemi)*y/max(abs(y),0.000001);
@@ -394,6 +398,9 @@ const fsSource = `#version 300 es
     //get cloud density
     float get_clouds(vec3 p,float intensity) {
         //convert cartesian to polar coordinates
+        if (_TidalLock>0.5) {
+            p.yz = p.zy;
+        }
         float y = asin(p.y);
         vec3 c = p/cos(y);
         float x = atan(c.z,c.x);
@@ -415,6 +422,9 @@ const fsSource = `#version 300 es
     //get blurred cloud density
     //uses blurred texture and no perlin noise
     float get_clouds_blurred(vec3 p,float intensity) {
+        if (_TidalLock>0.5) {
+            p.yz = p.zy;
+        }
         float y = asin(p.y);
         vec3 c = p/cos(y);
         float x = atan(c.z,c.x);
