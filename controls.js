@@ -49,7 +49,7 @@ function wheelHandler(event) {
 var minDistance = 1.0;
 
 function handleInput(time,deltaTime) {
-    distance += scrollAmount*(distance-minDistance)*2*deltaTime;
+    distance += scrollAmount*(distance-minDistance)*0.1*deltaTime;
     if (distance<minDistance+0.02) distance = minDistance+0.02;
     scrollAmount = 0;
     if (rightPressed) {
